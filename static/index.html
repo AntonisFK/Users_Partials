@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html ng-app= "myApp">
+<head>
+  <meta charset= "UTF-8">
+  <title>UsersController</title>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js'/></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
+
+  
+  <script>
+    var myApp = angular.module('myApp', ['ngRoute']);
+   
+    myApp.config(function($routeProvider){
+      $routeProvider
+        //set routes 
+        .when('/', {
+          templateUrl:  'partials/customizeUsers.html'
+        })
+        .when('/list', {
+          templateUrl : 'partials/userList.html'
+        })
+        .otherwise({
+          redirectTo: '/'
+        });
+    })
+    //UserFactory 
+    myApp.factory("UserFactory", function(){
+      var factory = {};
+      var users = [];
+      
+      factory.findUsers = function(callback){
+        console.log(callback)
+        callback(users)
+      }
+      factory.addUser = function(newUser, callback){
+        users.push(newUser)
+        callback(users)
+      }
+
+      factory.removeUser = function(removeUser, callback){
+        //remove users from 
+        var index = users.indexOf(removeUser);
+        console.log(index);
+        users.splice(index, 1);
+        callback(users);
+      }
+      return factory; 
+    })
+
+
+    //create User controller 
+    myApp.controller("CustomizeUsersController", function($scope, UserFactory){
+        
+       //send all users to the factory 
+       UserFactory.findUsers(function(users){
+        $scope.users = users;
+
+       })
+      $scope.addUser = function(){
+        UserFactory.addUser($scope.newUser, function(users){
+          $scope.users = users; 
+        })
+        $scope.newUser = null; 
+      };
+
+      $scope.removeUser = function(user){ 
+        UserFactory.removeUser(user, function(users){
+          $scope.users = users;
+        });              
+      };
+
+    })
+
+    myApp.controller("UserlistsController", function($scope, UserFactory){
+
+      UserFactory.findUsers(function(users){
+        $scope.users = users; 
+      })
+    })
+
+
+  </script>
+</head>
+<body>
+  
+  <div ng-app="myApp">
+    <a href="#/">Customize Users</a> | <a href="#/list">Users List </a>  
+    <span ng-view=""></span>
+  </div>
+
+
+</body>

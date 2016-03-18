@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <title>UsersList</title>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js'/></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
+</head>
+<body>
+  <div ng-controller ="UserlistsController">
+  <table>
+      <tr>
+        <td>Frist name </td>
+        <td>Last name</td>
+        <td>Favorite Language</td>
+      </tr>
+
+      <tr id="users_list" ng-repeat="user in users track by $index">
+        <td>{{user.first_name}}</td>
+        <td>{{user.last_name}}</td>
+        <td>{{user.language}}</td>
+      </tr>
+
+    </table>
+    
+
+  </div>
+</body>
+</html>
